@@ -6,6 +6,20 @@
   font-family: sans-serif;
 }
 
+#container > * + * {
+  margin-top: 20px;
+}
+
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  margin: 10px 0 0 0;
+}
+
 h1 {
   font-weight: 100;
   align-self: flex-start;

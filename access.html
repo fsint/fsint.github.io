@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Device Access</title>
+
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="import" href="polymer/google-map/google-map.html">
+
+    <style>
+
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      google-map {
+        min-height: 500px;
+      }
+
+      .dark {
+        color: white;
+        background-color: black;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+    <div id="container">
+      <h1>Device Access</h1>
+      <p>All your device are belong to us.</p>
+      <p id="geolocation">
+        <script>
+
+        // GEOLOCATION
+
+        var geoText = document.querySelector('#geolocation');
+        if('geolocation' in navigator) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            console.log(position);
+            var map = document.querySelector('google-map');
+            map.latitude = position.coords.latitude;
+            map.longitude = position.coords.longitude;
+            geoText.innerHTML = "Your longitude and latitude are " + map.longitude + ", " + map.latitude;
+            var marker = document.querySelector('google-map-marker');
+            marker.latitude = position.coords.latitude;
+            marker.longitude = position.coords.longitude;
+          });
+        } else {
+          geoText.innerHTML = "Your browser does not support geolocation.  Either way, we can't spy on your location.";
+        }
+
+        </script>
+      </p>
+      <google-map map-type="satellite">
+        <google-map-marker draggable="true" title="You are here."></google-map-marker>
+      </google-map>
+      <p id="ambient-light">
+        <script>
+
+          // AMBIENT LIGHT
+          var ALText = document.querySelector('#ambient-light');
+          if('ondevicelight' in window) {
+            var body = document.querySelector('body');
+            window.addEventListener('devicelight', function(event) {
+              if(event.value < 10) ALText.innerHTML ="It sure is dark in here.";
+              else ALText.innerHTML ="This amount of light is just about right.";
+              if(event.value < 40) body.classList.add("dark");
+              else body.classList.remove("dark");
+              if(event.value > 100) ALText.innerHTML ="You like it pretty bright in your workplace.";
+              if(event.value > 1000) alert("Please stop shining that light so brightly.");
+            });
+          } else {
+            ALText.innerHTML ="Your browser does not support ambient light detection. You must not be running Firefox on Mac.";
+          }
+        </script>
+      </p>
+    </div>
+
+  </body>
+
+</html>
