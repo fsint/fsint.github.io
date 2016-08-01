@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Shadow Dom</title>
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    <style>
+
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+    <div id="container">
+      <h1></h1>
+      <p>Type something:</p>
+      <input id="something"></input>
+      <p>The button below will prove to you that the above heading does not contain HTML text (click it):</p>
+      <button onclick="changeHeader()">Button</button>
+      <p>If you inspect the element, you'll notice that there is still no text except in the shadow-root.</p>
+
+      <script>
+        var host = document.querySelector('h1');
+        var root = host.createShadowRoot();
+        root.textContent = "Shadow Dom";
+        var changeHeader = function() {
+          root.textContent = document.querySelector('#something').value;
+        }
+      </script>
+
+    </div>
+
+  </body>
+
+</html>
