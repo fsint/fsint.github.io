@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Shadow Dom</title>
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    <style>
+
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+    <div id="container">
+      <h1>Template Element</h1>
+      <p>Below, a template element is defined.  You can't see it because it's a template element.</p>
+      <template>
+        <h2>This instance is called <span></span></h2>
+        <p>This instance is may be described as <span></span></p>
+      </template>
+      <p>For my next trick, I will attempt to create an instance of the template with data:</p>
+      <div id="template-copy-1"></div>
+      <p>Here is another instance:</p>
+      <div id="template-copy-2"></div>
+      <p>Did you see what I did there?  I kept some of the content the same, but changed the rest of it.  Because templates.</p>
+
+      <script>
+        var template = document.querySelector('template').content;
+        template.querySelector('h2 span').innerText = "THE FIRST";
+        template.querySelector('p span').innerText = "OVERLY DRAMATIC";
+        document.querySelector('#template-copy-1').appendChild(document.importNode(template, true));
+        template.querySelector('h2 span').innerText = "by name but never answers.";
+        template.querySelector('p span').innerText = "deaf.  Or simply not sentient.";
+        document.querySelector('#template-copy-2').appendChild(document.importNode(template, true));
+      </script>
+
+    </div>
+
+  </body>
+
+</html>

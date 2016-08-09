@@ -58,7 +58,7 @@
 
         var shadow = document.querySelector('#shadow');
         var shadowRoot = shadow.createShadowRoot();
-        shadowRoot.innerHTML = "<h1><shadow></shadow>shadows...</h1>";
+        shadowRoot.innerHTML = "<h1><slot></slot>shadows...</h1>";
 
         var numTotalClicks = 0;
         var numShadowClicks = 0;
