@@ -1,0 +1,36 @@
+<head>
+  <link rel="import" href="../../polymer/polymer/polymer.html">
+  <link rel="import" href="import1.html">
+
+  <style>
+    h3 {
+      color: blue;
+    }
+  </style>
+</head>
+
+<body>
+  <h3 onclick="changeColor()">Click me!</h3>
+
+  <script>
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    var changeColor = function() {
+      var colors = [
+        "blue",
+        "green",
+        "pink",
+        "red",
+        "orange",
+        "brown",
+        "grey"
+      ]
+      var newColor = colors[getRandomInt(0, colors.length)];
+      document.querySelector('h3').style.color = newColor;
+    }
+  </script>
+</body>

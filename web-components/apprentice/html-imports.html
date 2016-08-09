@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Shadow Dom</title>
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+    <link rel="import" href="import1.html">
+
+    <style>
+
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+    <div id="container">
+      <h1>HTML Imports</h1>
+      <h2>Usage of HTML Imports</h2>
+      <p>I don't think anything needs to be said here.</p>
+      <h2>HTML Sub-import Deduping</h2>
+      <p>Open the network tab in the console and reload the page.  Notice that even though import1.html and import2.html both import polymer.html and import1.html even imports itself, the files are not actually imported multiple times.</p>
+      <h2>Leverage data in a <code>link[rel=import]</code></h2>
+      <div id="imported-content"></div>
+      <p>The above ludicrousness should convince you that styles, DOM, and JavaScript are all being imported.</p>
+
+      <script>
+        document.querySelector('#imported-content').innerHTML = document.querySelector('link[rel="import"]').import.documentElement.innerHTML;
+      </script>
+
+    </div>
+
+  </body>
+
+</html>
