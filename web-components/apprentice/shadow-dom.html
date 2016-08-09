@@ -14,26 +14,86 @@
         align-items: center;
       }
 
+      h1 {
+        font-family: fantasy;
+      }
+
     </style>
 
   </head>
 
   <body>
     <div id="container">
-      <h1></h1>
+      <div id="shade"></div>
       <p>Type something:</p>
       <input id="something"></input>
       <p>The button below will prove to you that the above heading does not contain HTML text (click it):</p>
       <button onclick="changeHeader()">Button</button>
       <p>If you inspect the element, you'll notice that there is still no text except in the shadow-root.</p>
+      <p>These buttons query select <code>*</code> in the shadow root and set the color.  Because the header is in a shadow root, only it is affected.</p>
+      <div>
+        <button onclick="changeColor('red', 'grey')">Button</button>
+        <button onclick="changeColor('blue', 'white')">Button</button>
+        <button onclick="changeColor('green', 'black')">Button</button>
+      </div>
+      <h1>Shadows are cool</h1>
+      <p>The element you modified is not in the atrocious font above because its CSS is scoped (this page's global CSS is ignored).</p>
+      <p>Try this button and notice that it will not select the element in the shadow root but rather the document (change the text in the input field then click this button):</p>
+      <button onclick="changeNonShadowHeader()">Button</button>
+      <p>This button tries to select the element from <code>document</code>, which is not in the shadow root.</p>
+      <div id="shadow"></div>
+      <p>Type something epic that ends with "shadows..."</p>
+      <input id="shadow-text"></input>
+      <p>Click the button to change only the div's text, which will be used by the shadow root.</p>
+      <button onclick="changeShadowRoot()">Button</button>
+      <p>Notice this h1 isn't styled with an atrocious font either because its style is scoped.</p>
+      <p>This is the number of total clicks you have clicked since this page loaded: <span id="total-clicks"></span></p>
+      <p>This is the number of clicks in a shadow root you have clicked: <span id="shadow-clicks"></span></p>
+      <p>Can you figure out which shadow root is listening for clicks?  By the way, both query selectors are again using <code>*</code> but discriminate because shadow roots.</p>
 
       <script>
-        var host = document.querySelector('h1');
+        var host = document.querySelector('#shade');
         var root = host.createShadowRoot();
-        root.textContent = "Shadow Dom";
-        var changeHeader = function() {
-          root.textContent = document.querySelector('#something').value;
+        root.innerHTML = "<h1>Shadow Dom</h1>";
+
+        var shadow = document.querySelector('#shadow');
+        var shadowRoot = shadow.createShadowRoot();
+        shadowRoot.innerHTML = "<h1><shadow></shadow>shadows...</h1>";
+
+        var numTotalClicks = 0;
+        var numShadowClicks = 0;
+
+        var incTotalClicks = function() {
+          numTotalClicks++;
+          document.querySelector('#total-clicks').innerHTML = numTotalClicks;
         }
+
+        var incShadowClicks = function() {
+          numShadowClicks++;
+          document.querySelector('#shadow-clicks').innerHTML = numShadowClicks;
+        }
+
+        document.querySelector('*').addEventListener("click", incTotalClicks);
+        shadow.shadowRoot.querySelector('*').addEventListener("click", incShadowClicks);
+
+        var changeHeader = function() {
+          root.querySelector('*').innerHTML = document.querySelector('#something').value;
+        }
+
+        var changeNonShadowHeader = function() {
+          document.querySelector('h1').innerHTML = document.querySelector('#something').value;
+        }
+
+        var changeColor = function(textColor, backgroundColor) {
+          root.querySelector('*').style.color = textColor;
+          root.querySelector('*').style.backgroundColor = backgroundColor;
+        }
+
+        var changeShadowRoot = function() {
+          document.querySelector('#shadow').innerHTML = document.querySelector('#shadow-text').value;
+        }
+
+        var changeShadowText
       </script>
 
     </div>
