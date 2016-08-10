@@ -3,6 +3,7 @@
   flex-direction: column;
   align-content: center;
   width: 80vw;
+  margin: 40px 0;
   font-family: sans-serif;
 }
 
@@ -27,4 +28,16 @@ h3 {
 h1 {
   font-weight: 100;
   align-self: flex-start;
+}
+
+input {
+  padding: 10px;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
