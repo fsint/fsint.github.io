@@ -44,7 +44,7 @@
       <div id="shadow"></div>
       <p>Type something epic that ends with "shadows..."</p>
       <input id="shadow-text"></input>
-      <p>Click the button to change only the div's text, which will be used by the shadow root.</p>
+      <p>Click the button to change only the div's text (not modifying the shadow root), which will be used by the shadow root.  The shadow root makes use of a content tag.</p>
       <button onclick="changeShadowRoot()">Button</button>
       <p>Notice this h1 isn't styled with an atrocious font either because its style is scoped.</p>
       <p>This is the number of total clicks you have clicked since this page loaded: <span id="total-clicks"></span></p>
@@ -58,7 +58,7 @@
 
         var shadow = document.querySelector('#shadow');
         var shadowRoot = shadow.createShadowRoot();
-        shadowRoot.innerHTML = "<h1><slot></slot>shadows...</h1>";
+        shadowRoot.innerHTML = "<h1><content></content>shadows...</h1>";
 
         var numTotalClicks = 0;
         var numShadowClicks = 0;

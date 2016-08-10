@@ -2,7 +2,7 @@
 <html>
 
   <head>
-    <title>Shadow Dom</title>
+    <title>Template Element</title>
 
     <link rel="stylesheet" type="text/css" href="/styles.css">
 
@@ -31,15 +31,33 @@
       <p>Here is another instance:</p>
       <div id="template-copy-2"></div>
       <p>Did you see what I did there?  I kept some of the content the same, but changed the rest of it.  Because templates.</p>
+      <p>Make your own copies of the template by filling out the fields and clicking the button:</p>
+      <input id="template-input-1" placeholder="This instance is called..." />
+      <input id="template-input-2" placeholder="This instance may be described as..." />
+      <button onclick="appendTemplate()">Button</button>
 
       <script>
         var template = document.querySelector('template').content;
-        template.querySelector('h2 span').innerText = "THE FIRST";
-        template.querySelector('p span').innerText = "OVERLY DRAMATIC";
+        templateH2 = template.querySelector('h2 span');
+        templateP = template.querySelector('p span');
+        templateH2.innerText = "THE FIRST";
+        templateP.innerText = "OVERLY DRAMATIC";
         document.querySelector('#template-copy-1').appendChild(document.importNode(template, true));
-        template.querySelector('h2 span').innerText = "by name but never answers.";
-        template.querySelector('p span').innerText = "deaf.  Or simply not sentient.";
+        templateH2.innerText = "by name but never answers.";
+        templateP.innerText = "deaf.  Or simply not sentient.";
         document.querySelector('#template-copy-2').appendChild(document.importNode(template, true));
+
+        function appendTemplate() {
+          var input1 = document.querySelector('#template-input-1');
+          var input2 = document.querySelector('#template-input-2');
+          if(input1.text === "" || input2.text === "") return;
+          templateH2.innerText = input1.value;
+          templateP.innerText = input2.value;
+          console.log(input1);
+          input1.value = "";
+          input2.value = "";
+          document.querySelector('#container').appendChild(document.importNode(template, true));
+        }
       </script>
 
     </div>

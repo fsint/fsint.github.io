@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Custom Element</title>
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    <style>
+
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #container {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .chat-box {
+        width: 100%;
+        max-width: 500px;
+        max-height: 500px;
+        border: solid grey 1px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        align-self: center;
+      }
+
+      .chat-box * + * {
+        margin-bottom: 10px;
+      }
+
+      .input {
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .message-container {
+        display: flex;
+        flex-direction: column-reverse;;
+        height: 600px;
+        padding: 10px;
+        border: solid grey 1px;
+        width: 100%;
+        overflow: auto;
+        box-sizing: border-box;
+      }
+
+      .message-container * {
+        flex-shrink: 0;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+    <div id="container">
+      <h1>Custom Element</h1>
+      <p>Below, a custom element is defined.  You can't see it because the HTML is a template element.</p>
+      <template id="custom-element">
+        <style>
+          :host {
+            background: #eee;
+            padding: 10px;
+          }
+
+          :host > * {
+            margin: 0;
+          }
+
+          h4 {
+            margin-bottom: 5px;
+          }
+        </style>
+
+        <h4 id="name"></h4>
+        <p id="message"></p>
+
+      </template>
+      <p>Here is an instance of the custom element:</p>
+      <custom-element data-name="Hello, world!" data-message="I'm a custom element!"></custom-element>
+      <p>See usage here:</p>
+      <div class="chat-box">
+        <label for="name">Name:</label>
+        <input id="name" class="input input--name" />
+        <div id="messages" class="message-container">
+          <custom-element data-name="Brandon" data-message="Web components are awesome!"></custom-element>
+        </div>
+        <input id="new-message" class="input input--message" placeholder="Enter message..."/>
+      </div>
+
+      <script>
+        var proto = Object.create(HTMLElement.prototype, {
+          createdCallback: {
+            value: function() {
+              var t = document.querySelector('#custom-element');
+              var clone = document.importNode(t.content, true);
+              var shadow = this.createShadowRoot();
+              shadow.appendChild(clone);
+              shadow.querySelector('#name').innerText = this.getAttribute('data-name');
+              shadow.querySelector('#message').innerText = this.getAttribute('data-message');
+            }
+          },
+          attributeChangedCallback: {
+            value: function() {
+              console.log(this.shadowRoot);
+              this.shadowRoot.querySelector('#name').innerText = this.getAttribute('data-name');
+              this.shadowRoot.querySelector('#message').innerText = this.getAttribute('data-message');
+            }
+          }
+        });
+        var customElement = document.registerElement('custom-element', {prototype: proto});
+
+        var message = document.querySelector("#new-message");
+        message.addEventListener("keydown", function (e) {
+          // checks whether the pressed key is "Enter"
+          if (e.keyCode === 13) {
+            appendChatMessage(e);
+          }
+        });
+        function appendChatMessage(e) {
+          var name = document.querySelector('#name').value;
+          var message = e.srcElement.value;
+          name = name || "(no name)";
+          if(message === "") return;
+          var messages = document.querySelector('#messages');
+          var newMessageEl = messages.insertBefore(new customElement(), messages.firstChild)
+          newMessageEl.setAttribute('data-name', name);
+          newMessageEl.setAttribute('data-message', message);
+          e.srcElement.value = "";
+        }
+      </script>
+
+    </div>
+
+  </body>
+
+</html>
