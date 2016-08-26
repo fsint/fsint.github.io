@@ -31,8 +31,12 @@
         align-self: center;
       }
 
-      .chat-box * + * {
-        margin-bottom: 10px;
+      .chat-box > * + * {
+        margin-top: 10px;
+      }
+
+      custom-element {
+        margin-top: 10px;
       }
 
       .input {
@@ -68,6 +72,7 @@
           :host {
             background: #eee;
             padding: 10px;
+            word-wrap: break-word;
           }
 
           :host > * {
@@ -77,10 +82,18 @@
           h4 {
             margin-bottom: 5px;
           }
+
+          p {
+            display: flex;
+            justify-content: space-between;
+          }
         </style>
 
         <h4 id="name"></h4>
-        <p id="message"></p>
+        <p>
+          <span id="message"></span>
+          <sup><sub id="timestamp"></sub></sup>
+        </p>
 
       </template>
       <p>Here is an instance of the custom element:</p>
@@ -97,6 +110,19 @@
       <p><a href="https://github.com/intcreatorlds/intcreatorlds.github.io/blob/master/web-components/apprentice/custom-element.html">Source</a></p>
 
       <script>
+        var dayOfWeek = function() {
+          return {
+            0:"Sun",
+            1:"Mon",
+            2:"Tue",
+            3:"Wed",
+            4:"Thu",
+            5:"Fri",
+            6:"Sat"
+          }[new Date().getDay()];
+        };
+        var getTimestamp = function() { return dayOfWeek() + " " + new Date().getHours() + ":" + new Date().getMinutes()};
+
         var proto = Object.create(HTMLElement.prototype, {
           createdCallback: {
             value: function() {
@@ -106,19 +132,32 @@
               shadow.appendChild(clone);
               shadow.querySelector('#name').innerText = this.getAttribute('data-name');
               shadow.querySelector('#message').innerText = this.getAttribute('data-message');
+              shadow.querySelector('#timestamp').innerText = getTimestamp();
             }
           },
           attributeChangedCallback: {
             value: function() {
-              console.log(this.shadowRoot);
               this.shadowRoot.querySelector('#name').innerText = this.getAttribute('data-name');
               this.shadowRoot.querySelector('#message').innerText = this.getAttribute('data-message');
+              this.shadowRoot.querySelector('#timestamp').innerText = this.getAttribute('data-timestamp');
             }
           }
         });
+
+        // Object.defineProperty(proto, 'name', {
+        //   get: function() {
+        //     return this.getAttribute('data-name');
+        //   },
+        //   set: function(val) {
+        //     this.setAttribute('data-name', val);
+        //   }
+        // });
+
         var customElement = document.registerElement('custom-element', {prototype: proto});
 
         var message = document.querySelector("#new-message");
+        var lastNameUsed = "";
+        var lastTimestamp = "";
         message.addEventListener("keydown", function (e) {
           // checks whether the pressed key is "Enter"
           if (e.keyCode === 13) {
@@ -127,14 +166,19 @@
         });
         function appendChatMessage(e) {
           var name = document.querySelector('#name').value;
+          var timestamp = getTimestamp();
           var message = e.srcElement.value;
-          name = name || "(no name)";
+          var displayName = lastNameUsed === name ? "" : name || "(no name)";
+          var displayTimestamp = (lastTimestamp === timestamp && lastNameUsed === name) ? "" : timestamp;
           if(message === "") return;
           var messages = document.querySelector('#messages');
           var newMessageEl = messages.insertBefore(new customElement(), messages.firstChild)
-          newMessageEl.setAttribute('data-name', name);
+          newMessageEl.setAttribute('data-name', displayName);
           newMessageEl.setAttribute('data-message', message);
+          newMessageEl.setAttribute('data-timestamp', displayTimestamp);
           e.srcElement.value = "";
+          lastNameUsed = name;
+          lastTimestamp = timestamp;
         }
       </script>
 

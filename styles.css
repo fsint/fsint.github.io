@@ -15,6 +15,21 @@ button, input {
   font-size: 1em;
 }
 
+button {
+  background: #fff;
+  border: solid lightgrey 1px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  border: solid black 1px;
+}
+
+button:active {
+  background: #eee;
+}
+
 p {
   margin: 0;
 }
